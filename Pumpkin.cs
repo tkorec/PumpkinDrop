@@ -8,6 +8,8 @@ public class Pumpkin : MonoBehaviour
 {
     public GameObject npcCharacter;
 
+    public GameObject[] npcCharacters;
+
     public GameObject pumpkin;
 
     public GameObject plane;
@@ -81,7 +83,27 @@ public class Pumpkin : MonoBehaviour
             }
 
             // If pumpkin hits the NPC character
-            if (Vector3.Distance(pumpkin.transform.position, npcCharacter.transform.position) < 0.5)
+            foreach (GameObject item in npcCharacters)
+            {
+                if (Vector3.Distance(pumpkin.transform.position, item.transform.position) < 0.45)
+                {
+                    if (States.npcRunningState == true)
+                    {
+                        Score.hitStudents = Score.hitStudents + 3;
+                    }
+                    else
+                    {
+                        Score.hitStudents = Score.hitStudents + 1;
+                    }
+                    soundTwo.Play();
+                    hitStudentsText.text = Score.hitStudents.ToString();
+                    pumpkin.SetActive(false);
+                    item.SetActive(false);
+                    States.countDown = 0;
+                }
+            }
+
+            /*if (Vector3.Distance(pumpkin.transform.position, npcCharacter.transform.position) < 0.5)
             {
                 if (States.npcRunningState == true)
                 {
@@ -96,7 +118,7 @@ public class Pumpkin : MonoBehaviour
                 pumpkin.SetActive(false);
                 npcCharacter.SetActive(false);
                 States.countDown = 0;
-            }
+            }*/
         }
 
         // If players are out of ammo, change to scene in which they can see they score and whether they completed or failed level

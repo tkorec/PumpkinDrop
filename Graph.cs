@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Jobs;
+using TMPro;
 
 public class Graph : MonoBehaviour
 {
@@ -39,20 +40,9 @@ public class Graph : MonoBehaviour
     int thisNPC;
     int previouslyApproachedNode;
 
-    // Multidimensional array representing the vertices between graph's nodes
-    /*public float[,] verticesArray = new float[9, 9] {
-    //   A  B  C  D  E  F  G  H  I
-        {0, 1, 0, 1, 0, 0, 0, 0, 0}, // NodeA
-        {1, 0, 1, 1, 1, 0, 0, 0, 1}, // NodeB
-        {0, 1, 0, 1, 1, 0, 0, 0, 0}, // NodeC
-        {1, 1, 1, 0, 0, 0, 0, 0, 0}, // NodeD
-        {0, 1, 1, 0, 0, 1, 1, 1, 0}, // NodeE
-        {0, 0, 0, 0, 1, 0, 1, 0, 0}, // NodeF
-        {0, 0, 0, 0, 1, 1, 0, 1, 0}, // NodeG
-        {0, 0, 0, 0, 1, 0, 1, 0, 1}, // NodeH
-        {0, 1, 0, 0, 0, 0, 0, 1, 0}  // NodeI   
-    };*/
+    public TMP_Text hitStudentsText;
 
+    // Multidimensional array representing the vertices between graph's nodes
     public float[,] verticesArray = new float[29, 29] {
     //   A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  R  S  T  U  V  W  X  Y  Z  AA  AB  AC  AD
         {0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0,  0,  0}, // NodeA
@@ -279,7 +269,17 @@ public class Graph : MonoBehaviour
             After hitting the final node, the activity state of NPC character changes from active (true) to non-active (false).
             The NPC character disappears and the first if-statement that checks whether the character is active is executed.
             */
-            if (waypoints[approachingNode] == waypoints[endingNode])
+            if (waypoints[approachingNode] == waypoints[endingNode] && waypoints[endingNode].name == "NodeC_PrincipalOffice" && Score.hitStudents >= 2)
+            {
+                if (Vector3.Distance(npcCharacter.transform.position, waypoints[approachingNode].transform.position) < 0.5)
+                {
+                    npcCharacter.SetActive(false);
+                    States.countDown = 0;
+                    Score.hitStudents = Score.hitStudents - 2;
+                    hitStudentsText.text = Score.hitStudents.ToString();
+                }
+            }
+            else if (waypoints[approachingNode] == waypoints[endingNode])
             {
                 if (Vector3.Distance(npcCharacter.transform.position, waypoints[approachingNode].transform.position) < 0.5)
                 {
